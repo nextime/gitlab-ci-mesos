@@ -10,15 +10,17 @@ Currently this project contains a GitLab scheduler (assign jobs to slaves) and G
 
 from project root (requires Maven installed, Maven 3 is fine, Maven 2 should also work)
 
-   mvn install
-
+```bash
+ $ mvn install
+```
    
 ## Deployment
 
 You can build a package for Debian simply with
 
-   $ ./build_package.sh --version 0.0.2
-
+```bash
+ $ ./build_package.sh --version 0.0.2
+```
 
 
 
