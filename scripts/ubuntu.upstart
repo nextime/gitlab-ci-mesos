@@ -1,0 +1,18 @@
+description "gitlab-ci"
+
+start on runlevel [2345]
+respawn
+
+script
+  [ ! -f /etc/gitlab-ci/scheduler.conf ] || . /etc/gitlab-ci/scheduler.conf
+  [ -z "${ULIMIT:-}" ] || ulimit $ULIMIT
+  exec /usr/share/gitlab-ci/bin/gitlab-ci-scheduler \
+    ${MESOS_MASTER:+--master $MESOS_MASTER} \
+    ${GITLAB_CI_URL:+--gitlab $GITLAB_CI_URL} \
+    ${GITLAB_CI_DIR:+--dir $GITLAB_CI_DIR} \
+    ${GITLAB_CI_API:+--api $GITLAB_CI_API} \
+    ${GITLAB_CI_TOKEN:+--token $GITLAB_CI_TOKEN} \
+    ${GITLAB_KEY:+--key $GITLAB_KEY} \
+    >> "$LOG_DIR"/scheduler.log 2>&1
+end script
+

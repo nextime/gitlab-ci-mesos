@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -z ${MESOS_NATIVE_LIBRARY+x} ]
+then
+  echo "WARNING: MESOS_NATIVE_LIBRARY is not set"
+  MESOS_NATIVE_LIBRARY="/usr/local/lib/libmesos.so"
+fi
+export MESOS_NATIVE_LIBRARY="${MESOS_NATIVE_LIBRARY}"
+
+GITLAB_CI_HOME="/usr/share/gitlab-ci"
+LOGGING="${GITLAB_CI_HOME}/scheduler.properties"
+JAR=$(ls -1 $GITLAB_CI_HOME/gitlab*.jar)
+# Start the scheduler
+java -Djava.util.logging.config.file=${LOGGING} -cp ${JAR} org.gitlab.mesos.GitlabMesos $@

@@ -1,0 +1,7 @@
+target/*
+classes/*
+/gitlab_ci-runner/nbproject/private/
+lib/*
+deb/*
+*.deb
+nbactions.xml

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+GITLAB_CI_HOME="/usr/share/gitlab-ci"
+LOGGING="${GITLAB_CI_HOME}/exec.properties"
+JAR=$(ls -1 $GITLAB_CI_HOME/gitlab*.jar)
+
+# Start the executor
+java -Djava.util.logging.config.file=${LOGGING} -cp ${JAR} org.gitlab.runner.Exec $@
