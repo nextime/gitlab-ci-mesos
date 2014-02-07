@@ -58,8 +58,10 @@ public class Build implements Runnable {
         } catch (IOException ex) {
             state = State.failed;
             logger.log(Level.SEVERE, ex.getMessage(), ex);
+            ret = 2;
         } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
+            ret = 3;
         }
         fireFinished(output.toString(), ret);
     }
