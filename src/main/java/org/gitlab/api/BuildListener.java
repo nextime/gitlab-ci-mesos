@@ -8,6 +8,6 @@ import org.gitlab.api.json.BuildInfo;
  */
 public interface BuildListener {
 
-    public void buildFinished(BuildInfo build, State state, String trace);
+    public void buildFinished(BuildInfo build, State state, String trace, int returnValue);
 
 }

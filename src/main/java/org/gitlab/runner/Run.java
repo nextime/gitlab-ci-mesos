@@ -33,14 +33,16 @@ public class Run implements Runnable, BuildListener {
     }
 
     @Override
-    public void buildFinished(BuildInfo build, State state, String trace) {
+    public void buildFinished(BuildInfo build, State state, String trace, int ret) {
         try {
             logger.log(Level.INFO, "pushing build {0}", build.id);
             gitlabci.pushBuild(build, state, trace);
+            logger.log(Level.INFO, "build finished with code {0}", ret);
 
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
+        System.exit(ret);
     }
 
 }

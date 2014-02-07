@@ -38,11 +38,11 @@ public class Build implements Runnable {
 
     @Override
     public void run() {
+        int ret = 1;
+        StringBuilder output = new StringBuilder();
         state = State.running;
         try {
             logger.log(Level.INFO, "starting build {0}", info.id);
-            StringBuilder output = new StringBuilder();
-
             repoDir = new File(projectDir(), safeProjectName());
             File script = File.createTempFile("build", ".sh", projectDir());
             FileWriter wr = new FileWriter(script);
@@ -51,10 +51,9 @@ public class Build implements Runnable {
             wr.flush();
             wr.close();
             logger.log(Level.INFO, "executing: {0}", cmd);
-            exec(script, output);
+            ret = exec(script, output);
             state = State.success;
             logger.log(Level.INFO, "finished build {0}", info.id);
-            fireFinished(output.toString());
             script.deleteOnExit();
         } catch (IOException ex) {
             state = State.failed;
@@ -62,6 +61,7 @@ public class Build implements Runnable {
         } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
+        fireFinished(output.toString(), ret);
     }
 
     private int exec(File script, StringBuilder output) throws IOException, InterruptedException {
@@ -107,9 +107,9 @@ public class Build implements Runnable {
         return ret;
     }
 
-    private void fireFinished(String trace) {
+    private void fireFinished(String trace, int ret) {
         for (BuildListener l : listeners) {
-            l.buildFinished(info, state, trace);
+            l.buildFinished(info, state, trace, ret);
         }
     }
 
