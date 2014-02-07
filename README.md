@@ -1,5 +1,7 @@
 # GitLab CI Mesos Framework
 
+[![Build Status](https://travis-ci.org/deric/gitlab-ci-mesos.png?branch=master)](https://travis-ci.org/deric/gitlab-ci-mesos)
+
 Mesos framework for running Gitlab CI tasks.
 
 ![gitlab-ci-scheme](https://raw.github.com/deric/gitlab-ci-mesos/diagram/diagrams/gitlab-ci.png)
