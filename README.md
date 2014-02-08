@@ -12,6 +12,13 @@ Project contains currently two compoments, first one is a scheduler, which is a 
 
 Executor script must be on each slave's PATH.
 
+## Requirements
+
+  * GitLab >= 6.4
+  * GitLab CI ~ 4.2
+  * Mesos
+  * Oracle Java 7
+
 ## Development / Building
 
 from project root (requires Maven installed, Maven 3 is fine, Maven 2 should also work)
