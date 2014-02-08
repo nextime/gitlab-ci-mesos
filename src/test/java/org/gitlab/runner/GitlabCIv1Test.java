@@ -195,8 +195,9 @@ public class GitlabCIv1Test {
      * Test of isRegistered method, of class GitlabCIv1.
      */
     @Test
-    public void testIsRegistered() {
+    public void testIsRegistered() throws IOException {
         subject = new GitlabCIv1(conf);
+        subject.init();
         assertEquals(true, subject.isRegistered());
     }
 
