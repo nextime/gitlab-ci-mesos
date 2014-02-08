@@ -17,7 +17,7 @@ Executor script must be on each slave's PATH.
   * GitLab >= 6.4
   * GitLab CI ~ 4.2
   * Mesos
-  * Oracle Java 7
+  * Oracle Java 7 / OpenJDK 6 / OpenJDK 7
 
 ## Development / Building
 
