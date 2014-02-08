@@ -2,11 +2,12 @@ package org.gitlab.runner;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.google.api.client.util.Charsets;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  *
@@ -15,10 +16,32 @@ import java.nio.file.Paths;
 public class Utils {
 
     public static String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+        return readFile(new File(path), encoding);
     }
 
+    public static String readFile(File file, Charset encoding) throws IOException {
+        InputStream in = new FileInputStream(file);
+        byte[] b = new byte[(int) file.length()];
+        int len = b.length;
+        int total = 0;
+
+        while (total < len) {
+            int result = in.read(b, total, len - total);
+            if (result == -1) {
+                break;
+            }
+            total += result;
+        }
+
+        return new String(b, Charsets.UTF_8);
+    }
+
+    /**
+     * Replace Unix "~" with real path to user's home
+     *
+     * @param path
+     * @return absolute path
+     */
     public static String normalizePath(String path) {
         return path.replace("~", System.getProperty("user.home"));
     }
