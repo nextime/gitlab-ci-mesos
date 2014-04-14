@@ -193,10 +193,13 @@ public class GitlabCIv1Test {
 
     /**
      * Test of isRegistered method, of class GitlabCIv1.
+     *
+     * @throws java.io.IOException
      */
     @Test
     public void testIsRegistered() throws IOException {
         subject = new GitlabCIv1(conf);
+        conf.setToken("aaabbbccc");
         subject.init();
         assertEquals(true, subject.isRegistered());
     }
