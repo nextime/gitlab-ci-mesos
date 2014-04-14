@@ -126,7 +126,7 @@ public class GitlabScheduler implements Scheduler {
 
     @Override
     public void resourceOffers(SchedulerDriver driver, List<Offer> offers) {
-        LOGGER.log(Level.INFO, "Received offers {0}", offers.size());
+        LOGGER.log(Level.FINE, "Received offers {0}", offers.size());
         // if we have resource offers, we check for avaiable tasks
         checkForNewTasks();
         for (Offer offer : offers) {
