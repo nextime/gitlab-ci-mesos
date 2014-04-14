@@ -75,7 +75,7 @@ public class BuildTest {
     @Test
     public void testSafeProjectName() throws IOException {
         BuildInfo info = new BuildInfo();
-        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
+        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@localhost/root/build-test.git";
         GitlabConfig conf = new GitlabConfigImpl("localhost");
         conf.setBuildDir("/tmp/test");
         subject = new Build(info, conf);
@@ -85,7 +85,7 @@ public class BuildTest {
     @Test
     public void testGetBuildProcess() throws IOException {
         BuildInfo info = new BuildInfo();
-        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
+        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@localhost/root/build-test.git";
         GitlabConfig conf = new GitlabConfigImpl("localhost");
         conf.setBuildDir("/tmp/test");
         subject = new Build(info, conf);
@@ -97,8 +97,9 @@ public class BuildTest {
     @Test
     public void testGetBuildProcessWithGivenUser() throws IOException {
         BuildInfo info = new BuildInfo();
-        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
+        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@localhost/root/build-test.git";
         GitlabConfig conf = new GitlabConfigImpl("localhost");
+        conf.setToken("aaabbbcccddd");
         conf.setBuildDir("/tmp/test");
         conf.setUser("deploy");
         subject = new Build(info, conf);
