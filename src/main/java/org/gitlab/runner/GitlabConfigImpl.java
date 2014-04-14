@@ -23,6 +23,7 @@ public class GitlabConfigImpl implements GitlabConfig {
     private File configFile;
     private String url = "";
     private String token = "";
+    private String user;
 
     public GitlabConfigImpl(String url) throws IOException {
         this.url = url;
@@ -163,4 +164,13 @@ public class GitlabConfigImpl implements GitlabConfig {
         return this.url;
     }
 
+    @Override
+    public String getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(String user) {
+        this.user = user;
+    }
 }

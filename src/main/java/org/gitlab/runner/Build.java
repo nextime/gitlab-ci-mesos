@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gitlab.api.BuildListener;
+import org.gitlab.api.GitlabConfig;
 import org.gitlab.api.State;
 import org.gitlab.api.json.BuildInfo;
 
@@ -25,15 +26,15 @@ public class Build implements Runnable {
     private final transient LinkedList<BuildListener> listeners = new LinkedList<BuildListener>();
     private static final Logger logger = Logger.getLogger(Build.class.getName());
     private State state = State.waiting;
-    private File tmpDir;
     private File prjDir;
     private File repoDir;
     private String projName;
     private Long timeout = 7200l;
+    private final GitlabConfig config;
 
-    public Build(BuildInfo info, File buildDir) {
+    public Build(BuildInfo info, GitlabConfig config) {
         this.info = info;
-        this.tmpDir = buildDir;
+        this.config = config;
     }
 
     @Override
@@ -66,10 +67,22 @@ public class Build implements Runnable {
         fireFinished(output.toString(), ret);
     }
 
-    private int exec(File script, StringBuilder output) throws IOException, InterruptedException {
-        ProcessBuilder buildProc = new ProcessBuilder("sh", "-x", "-e", script.getAbsolutePath());
+    protected ProcessBuilder getBuildProcess(File script) {
+        ProcessBuilder buildProc;
+        if (config.getUser() != null) {
+            String scr = "sh -x -e " + script.getAbsolutePath();
+            //TODO allow changing user's shell
+            buildProc = new ProcessBuilder("su", "-c", "\"" + scr + "\"", "-s", "/bin/bash", config.getUser());
+        } else {
+            buildProc = new ProcessBuilder("sh", "-x", "-e", script.getAbsolutePath());
+        }
         buildProc.directory(projectDir());
         buildProc.redirectErrorStream(true);
+        return buildProc;
+    }
+
+    private int exec(File script, StringBuilder output) throws IOException, InterruptedException {
+        ProcessBuilder buildProc = getBuildProcess(script);
 
         Map<String, String> env = buildProc.environment();
         env.put("CI_SERVER", "yes");
@@ -121,7 +134,7 @@ public class Build implements Runnable {
 
     private File projectDir() {
         if (prjDir == null) {
-            prjDir = new File(tmpDir, "project-" + info.id);
+            prjDir = new File(config.getBuildDir(), "project-" + info.id);
             if (!prjDir.exists()) {
                 if (!prjDir.mkdir()) {
                     throw new RuntimeException("failed to create directory: " + prjDir.getAbsolutePath());

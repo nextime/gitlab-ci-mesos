@@ -1,6 +1,9 @@
 package org.gitlab.runner;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.gitlab.api.GitlabConfig;
 import org.gitlab.api.json.BuildInfo;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -66,13 +69,44 @@ public class BuildTest {
 
     /**
      * Test of safeProjectName method, of class Build.
+     *
+     * @throws java.io.IOException
      */
     @Test
-    public void testSafeProjectName() {
+    public void testSafeProjectName() throws IOException {
         BuildInfo info = new BuildInfo();
         info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
-        subject = new Build(info, new File("/tmp/test"));
+        GitlabConfig conf = new GitlabConfigImpl("localhost");
+        conf.setBuildDir("/tmp/test");
+        subject = new Build(info, conf);
         assertEquals("build-test", subject.safeProjectName());
     }
 
+    @Test
+    public void testGetBuildProcess() throws IOException {
+        BuildInfo info = new BuildInfo();
+        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
+        GitlabConfig conf = new GitlabConfigImpl("localhost");
+        conf.setBuildDir("/tmp/test");
+        subject = new Build(info, conf);
+        File temp = File.createTempFile("foo-bar", ".tmp");
+        ProcessBuilder proc = subject.getBuildProcess(temp);
+        assertEquals("sh", proc.command().get(0));
+    }
+
+    @Test
+    public void testGetBuildProcessWithGivenUser() throws IOException {
+        BuildInfo info = new BuildInfo();
+        info.repoUrl = "http://gitlab-ci-token:fb3c220c40ec5f9bafa16ce4cbbf95@example.com/root/build-test.git";
+        GitlabConfig conf = new GitlabConfigImpl("localhost");
+        conf.setBuildDir("/tmp/test");
+        conf.setUser("deploy");
+        subject = new Build(info, conf);
+        File temp = File.createTempFile("foo-bar", ".tmp");
+        ProcessBuilder proc = subject.getBuildProcess(temp);
+        assertEquals("su", proc.command().get(0));
+        List<String> cmds = proc.command();
+        assertEquals("deploy", cmds.get(cmds.size() - 1));
+
+    }
 }

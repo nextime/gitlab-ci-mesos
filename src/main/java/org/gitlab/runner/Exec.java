@@ -34,6 +34,7 @@ public class Exec {
             config = new GitlabConfigImpl(params.gitlab);
             config.setBuildDir(params.tmpDir);
             config.setToken(params.token);
+            config.setUser(params.user);
             ci = new GitlabCIv1(config);
             ci.init();
 

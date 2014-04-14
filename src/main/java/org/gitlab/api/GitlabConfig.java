@@ -62,4 +62,17 @@ public interface GitlabConfig {
      */
     public void setBuildDir(String path) throws IOException;
 
+    /**
+     *
+     * @return
+     */
+    public String getUser();
+
+    /**
+     * User account for running tasks
+     *
+     * @param user
+     */
+    public void setUser(String user);
+
 }

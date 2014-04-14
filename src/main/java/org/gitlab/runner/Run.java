@@ -26,7 +26,7 @@ public class Run implements Runnable, BuildListener {
     @Override
     public void run() {
         logger.log(Level.INFO, "starting build");
-        Build build = new Build(info, gitlabci.getConfig().getBuildDir());
+        Build build = new Build(info, gitlabci.getConfig());
         build.addListener(this);
         build.run();
 

@@ -20,4 +20,7 @@ public class GitlabExecParams {
     @Parameter(names = "--dir", description = "Path to build directory (default: ~/tmp/gitlab-runner)")
     public String tmpDir = "~/tmp/gitlab-runner";
 
+    @Parameter(names = "--user", description = "user account under which we execute all builds")
+    public String user;
+
 }

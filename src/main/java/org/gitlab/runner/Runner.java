@@ -38,7 +38,7 @@ public class Runner implements Runnable, BuildListener {
             try {
                 current = gitlabci.getBuild();
                 if (current != null) {
-                    Build build = new Build(current, gitlabci.getConfig().getBuildDir());
+                    Build build = new Build(current, gitlabci.getConfig());
                     build.addListener(this);
                     new Thread(build).start();
                 }
